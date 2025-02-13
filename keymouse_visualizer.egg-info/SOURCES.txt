@@ -1,0 +1,7 @@
+setup.py
+keymouse_visualizer.egg-info/PKG-INFO
+keymouse_visualizer.egg-info/SOURCES.txt
+keymouse_visualizer.egg-info/dependency_links.txt
+keymouse_visualizer.egg-info/entry_points.txt
+keymouse_visualizer.egg-info/requires.txt
+keymouse_visualizer.egg-info/top_level.txt

@@ -1,0 +1,2 @@
+[console_scripts]
+keymouse = src.main:main

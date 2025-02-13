@@ -1,0 +1,25 @@
+mkdir -p src/{core,gui,utils} tests/{unit,integration}
+touch src/__init__.py
+touch src/core/__init__.py
+touch src/gui/__init__.py
+touch src/utils/__init__.py
+
+# 创建并激活虚拟环境
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+
+# 更新pip
+python -m pip install --upgrade pip
+
+# 清理环境
+pip uninstall -y PyQt6 PyQt6-Qt6 PyQt6-sip qt-material
+pip uninstall -y PySide6 PySide6-Qt6 PySide6-sip
+
+# 安装项目及其所有依赖
+pip install -e .
+
+# 安装pynput
+pip install pynput
+
+# 运行程序
+python src/main.py 

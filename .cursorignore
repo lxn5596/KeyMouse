@@ -1,0 +1,21 @@
+# 忽略虚拟环境
+.venv/
+venv/
+
+# 忽略构建文件
+build/
+dist/
+*.spec
+
+# 忽略缓存
+__pycache__/
+*.pyc
+
+# 忽略IDE配置
+.idea/
+.vscode/
+
+# 忽略日志和数据文件
+*.log
+*.db
+*.sqlite3 

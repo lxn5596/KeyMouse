@@ -1,0 +1,26 @@
+# 核心依赖
+PyQt6==6.6.1
+pynput==1.7.6
+keyboard==0.13.5
+mouse==0.7.1
+
+# GUI 增强
+qt-material==2.14
+pillow==10.2.0
+
+# 数据存储
+SQLAlchemy==2.0.25
+PyYAML==6.0.1
+
+# Windows系统支持
+pywin32==306
+
+# 开发工具
+pytest==7.4.4
+black==24.1.1
+flake8==7.0.0
+mypy==1.8.0
+
+# 打包工具
+pyinstaller==6.3.0 
+

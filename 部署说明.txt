@@ -1,0 +1,81 @@
+KeyMouse 打包部署说明
+===================
+
+一、环境准备
+-----------
+1. Python 3.8 或更高版本
+2. Inno Setup 6 (安装路径：D:\Program\Inno Setup 6)
+3. 确保已安装以下 Python 包：
+   - pip install pyinstaller
+   - pip install pyside6
+   - pip install pynput
+
+二、项目结构
+-----------
+KeyMouse/
+├── src/
+│   ├── assets/
+│   │   └── icon.ico          # 程序图标
+│   ├── core/
+│   │   └── keyboard_monitor.py
+│   ├── gui/
+│   │   ├── keyboard_view.py
+│   │   └── mouse_view.py
+│   └── main.py
+├── build.bat                 # 打包脚本
+├── setup.iss                 # Inno Setup 配置
+├── ChineseSimplified.isl    # 中文语言文件
+└── requirements.txt          # 依赖包列表
+
+三、打包步骤
+-----------
+1. 确保所有文件都在正确的位置
+2. 运行 build.bat 脚本，它会自动执行以下操作：
+   - 清理旧的构建文件
+   - 使用 PyInstaller 打包程序
+   - 复制必要的资源文件
+   - 使用 Inno Setup 创建安装程序
+
+四、输出文件
+-----------
+打包完成后，在 dist 目录下可以找到：
+1. keymouse 目录 - 包含程序所有文件
+2. KeyMouse-Setup.exe - 安装程序
+
+五、测试验证
+-----------
+1. 运行程序测试：
+   - 直接运行 dist/keymouse/keymouse.exe
+   - 检查键盘和鼠标操作显示是否正常
+   - 检查托盘图标和菜单是否正常
+
+2. 安装程序测试：
+   - 运行 dist/KeyMouse-Setup.exe
+   - 验证安装过程是否正常
+   - 检查开始菜单快捷方式
+   - 测试开机自启动选项
+   - 验证卸载功能
+
+六、常见问题
+-----------
+1. 如果打包失败，检查：
+   - Python 环境是否正确
+   - 所需包是否都已安装
+   - Inno Setup 是否安装在正确位置
+
+2. 如果程序运行异常，检查：
+   - 图标文件是否存在
+   - 程序权限是否足够
+   - 系统环境是否兼容
+
+七、注意事项
+-----------
+1. 打包前确保已关闭正在运行的程序
+2. 建议在打包前先清理 build 和 dist 目录
+3. 确保所有资源文件的路径正确
+4. 建议在打包后进行完整的功能测试
+
+八、联系方式
+-----------
+如有问题，请联系：
+网站：https://yuansio.com 

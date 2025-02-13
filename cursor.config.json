@@ -1,0 +1,27 @@
+{
+    "projectName": "KeyMouse Visualizer",
+    "aiSettings": "aisettings",
+    "language": "Python",
+    "formatOnSave": true,
+    "lintOnSave": true,
+    "checkTypes": true,
+    "moduleStructure": {
+        "src": {
+            "core": ["keyboard_monitor.py", "mouse_monitor.py", "event_handler.py"],
+            "gui": ["main_window.py", "keyboard_view.py", "mouse_view.py", "settings_dialog.py"],
+            "utils": ["config_manager.py", "logger.py", "system_hooks.py"]
+        },
+        "tests": {
+            "unit": [],
+            "integration": []
+        }
+    },
+    "pythonPath": ".venv/bin/python",
+    "pythonVersion": "3.12",
+    "customCommands": {
+        "format": "black src tests",
+        "lint": "flake8 src tests",
+        "typecheck": "mypy src",
+        "test": "pytest tests"
+    }
+} 

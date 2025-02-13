@@ -1,0 +1,75 @@
+# KeyMouse Visualizer AI 设置
+project_type: "Python"
+project_name: "KeyMouse Visualizer"
+architecture: "模块化"
+
+# 核心开发约束
+constraints:
+  - "严格遵循需求文档定义的功能范围"
+  - "避免引入未在需求文档中指定的功能"
+  - "保持代码模块化，避免代码耦合"
+  - "遵循Python代码规范(PEP 8)"
+
+# 项目结构规范
+structure:
+  core:
+    - "keyboard_monitor: 键盘监控模块"
+    - "mouse_monitor: 鼠标监控模块"
+    - "event_handler: 事件处理模块"
+  gui:
+    - "main_window: 主窗口模块"
+    - "keyboard_view: 键盘显示模块"
+    - "mouse_view: 鼠标显示模块"
+    - "settings_dialog: 设置界面模块"
+  utils:
+    - "config_manager: 配置管理"
+    - "logger: 日志记录"
+    - "system_hooks: 系统钩子"
+
+# 关键词缩写规范
+abbreviations:
+  - "KM: KeyMouse"
+  - "KB: Keyboard"
+  - "MS: Mouse"
+  - "CFG: Config"
+  - "VIS: Visualizer"
+  - "EVT: Event"
+
+# 技术栈约束
+tech_stack:
+  gui_framework: "PyQt6"
+  input_libs: ["pynput", "keyboard", "mouse"]
+  storage: ["SQLite", "JSON"]
+  styling: "qt-material"
+
+# 性能要求
+performance:
+  key_response: "<50ms"
+  cpu_usage: "<5%"
+  memory_limit: "<100MB"
+
+# 代码质量要求
+code_quality:
+  linting: ["flake8", "mypy"]
+  formatting: "black"
+  testing: "pytest"
+
+# 模块化开发指南
+modularity:
+  - "每个功能模块应该是独立的"
+  - "使用接口进行模块间通信"
+  - "避免循环依赖"
+  - "保持单一职责原则"
+
+# 文件命名规范
+naming_convention:
+  modules: "snake_case"
+  classes: "PascalCase"
+  functions: "snake_case"
+  constants: "UPPER_CASE"
+
+# 注释要求
+documentation:
+  - "所有公共API必须有文档字符串"
+  - "复杂逻辑需要添加详细注释"
+  - "使用中文注释" 

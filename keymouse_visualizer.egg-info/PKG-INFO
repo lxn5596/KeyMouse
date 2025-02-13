@@ -1,0 +1,18 @@
+Metadata-Version: 2.2
+Name: keymouse-visualizer
+Version: 1.0.0
+Requires-Python: >=3.8
+Requires-Dist: PySide6==6.6.1
+Requires-Dist: pynput==1.7.6
+Requires-Dist: keyboard==0.13.5
+Requires-Dist: mouse==0.7.1
+Requires-Dist: qt-material==2.14
+Requires-Dist: pillow==10.2.0
+Provides-Extra: dev
+Requires-Dist: pytest==7.4.4; extra == "dev"
+Requires-Dist: black==24.1.1; extra == "dev"
+Requires-Dist: flake8==7.0.0; extra == "dev"
+Requires-Dist: mypy==1.8.0; extra == "dev"
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
