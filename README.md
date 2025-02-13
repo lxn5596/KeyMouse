@@ -10,7 +10,7 @@
   pip install pynput
 二、项目结构
 plaintext
-复制
+
 KeyMouse/
 ├── src/
 │   ├── assets/
@@ -86,13 +86,12 @@ KeyMouse/
 🔍 重点检查以下路径：
 
 bash
-复制
+
 src/assets/
 dist/keymouse/resources/
 八、技术支持
 访问官网获取帮助：https://yuansio.com
 
-复制
 
 ### 优化说明：
 1. 使用更清晰的标题层级结构
