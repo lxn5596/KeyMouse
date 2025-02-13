@@ -57,6 +57,7 @@ class MouseView(QWidget):
         self.mouse_labels = []
         self.display_duration = 2000
         self._shown_actions = {}
+        self.max_labels = 3  # 设置最大标签数量
         self.is_locked = True
         self.is_positioning = False
         
@@ -102,6 +103,12 @@ class MouseView(QWidget):
             if current_time - self._shown_actions[action] < 0.01:
                 return
         
+        # 如果已经达到最大显示数量，移除最旧的标签
+        while len(self.mouse_labels) >= self.max_labels:
+            oldest_label = self.mouse_labels.pop(0)
+            if oldest_label.is_valid:
+                oldest_label.fade_out()
+        
         # 创建新标签
         label = MouseLabel(action)
         self.actions_layout.addWidget(label)
@@ -112,12 +119,6 @@ class MouseView(QWidget):
         
         # 保存标签引用
         self.mouse_labels.append(label)
-        
-        # 限制显示数量
-        if len(self.mouse_labels) > 5:  # 限制同时显示的数量
-            oldest_label = self.mouse_labels.pop(0)
-            if oldest_label.is_valid:
-                oldest_label.fade_out()
 
     def mousePressEvent(self, event):
         """鼠标按下事件"""

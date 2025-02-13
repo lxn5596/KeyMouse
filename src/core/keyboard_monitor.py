@@ -184,17 +184,21 @@ class KeyboardMonitor(QObject):
         if key_str not in self._pressed_keys:
             self._pressed_keys.add(key_str)
             self._key_press_times[key_str] = current_time
-            self.key_pressed.emit(key_str, False)
+            # 只有在不是组合键的情况下才发送单键信号
+            if len(self._pressed_keys) == 1:
+                self.key_pressed.emit(key_str, False)
             should_update_combo = True
             
         # 检查是否是长按
         elif (key_str not in self._long_press_keys and 
               current_time - self._key_press_times[key_str] > self.LONG_PRESS_THRESHOLD):
             self._long_press_keys.add(key_str)
-            self.key_pressed.emit(key_str, True)
+            # 只有在不是组合键的情况下才发送长按信号
+            if len(self._pressed_keys) == 1:
+                self.key_pressed.emit(key_str, True)
             should_update_combo = True
         
-        # 只在状态变化时发送组合键信号
+        # 只在有多个按键时发送组合键信号
         if should_update_combo and len(self._pressed_keys) > 1:
             keys = []
             modifiers = {'Ctrl', 'Alt', 'Shift', 'Win'}

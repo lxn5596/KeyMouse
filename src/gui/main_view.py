@@ -1,6 +1,6 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QMenu, QSystemTrayIcon
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QMenu, QSystemTrayIcon, QApplication
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QIcon
 from gui.keyboard_view import KeyboardView
 from gui.mouse_view import MouseView
 from pathlib import Path
@@ -23,9 +23,7 @@ class MainView(QWidget):
         self.is_locked = True  # 默认锁定状态
         self.is_positioning = False  # 添加定位模式标志
         
-        # 创建位置调整动作（移到这里）
-        self.position_action = QAction("修改位置", self)
-        self.position_action.triggered.connect(self.toggle_position_mode)
+        self.tray_icon = None  # 添加托盘图标引用
         
         self.init_ui()
         self.load_position()  # 加载保存的位置
@@ -59,20 +57,37 @@ class MainView(QWidget):
     
     def create_tray_icon(self):
         """创建系统托盘图标"""
+        # 创建托盘图标
         self.tray_icon = QSystemTrayIcon(self)
-        self.tray_menu = QMenu()
         
-        # 使用已创建的位置调整动作
-        self.tray_menu.addAction(self.position_action)
+        # 设置图标
+        icon_path = str(Path(__file__).parent.parent / 'assets' / 'icon.ico')
+        self.tray_icon.setIcon(QIcon(icon_path))
         
-        self.tray_menu.addSeparator()
+        # 创建托盘菜单
+        tray_menu = QMenu()
         
-        quit_action = QAction("退出", self)
-        quit_action.triggered.connect(self.close)
-        self.tray_menu.addAction(quit_action)
+        # 只添加退出选项
+        exit_action = QAction("退出", self)
+        exit_action.triggered.connect(self.force_quit)  # 使用新的退出方法
+        tray_menu.addAction(exit_action)
         
-        self.tray_icon.setContextMenu(self.tray_menu)
+        # 设置菜单并显示
+        self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.show()
+        
+        # 双击托盘图标时显示/隐藏窗口
+        self.tray_icon.activated.connect(self._on_tray_activated)
+
+    def _on_tray_activated(self, reason):
+        """处理托盘图标激活事件"""
+        if reason == QSystemTrayIcon.DoubleClick:
+            if self.isVisible():
+                self.hide()
+            else:
+                self.show()
+                self.raise_()
+                self.activateWindow()
     
     def toggle_position_mode(self):
         """切换位置调整模式"""
@@ -80,14 +95,12 @@ class MainView(QWidget):
             # 锁定位置
             self.is_positioning = False
             self.is_locked = True
-            self.position_action.setText("修改位置")
             self.restore_window_style()
             self.save_position()
         else:
             # 开始调整位置
             self.is_positioning = True
             self.is_locked = False
-            self.position_action.setText("锁定位置")
             self.show()
             self.raise_()
             self.activateWindow()
@@ -155,7 +168,6 @@ class MainView(QWidget):
                 
                 self.move(config['position']['x'], config['position']['y'])
                 self.is_locked = config.get('is_locked', True)
-                self.position_action.setText("修改位置" if self.is_locked else "锁定位置")
             except:
                 self.reset_position()
         else:
@@ -175,8 +187,10 @@ class MainView(QWidget):
         """显示右键菜单"""
         menu = QMenu(self)
         
-        # 使用同一个动作
-        menu.addAction(self.position_action)
+        # 根据当前状态设置动作文本
+        position_action = QAction("锁定位置" if not self.is_locked else "修改位置", self)
+        position_action.triggered.connect(self.toggle_position_mode)
+        menu.addAction(position_action)
         
         # 重置位置动作
         reset_action = QAction("重置位置", self)
@@ -186,7 +200,28 @@ class MainView(QWidget):
         menu.addSeparator()
         
         quit_action = QAction("退出", self)
-        quit_action.triggered.connect(self.close)
+        quit_action.triggered.connect(self.force_quit)  # 使用 force_quit 而不是 close
         menu.addAction(quit_action)
         
-        menu.exec(self.mapToGlobal(pos)) 
+        menu.exec(self.mapToGlobal(pos))
+
+    def closeEvent(self, event):
+        """处理窗口关闭事件"""
+        # 停止监控
+        self.kb_view.monitor.stop()
+        self.mouse_view.monitor.stop()
+        
+        # 移除托盘图标
+        if self.tray_icon is not None:
+            self.tray_icon.hide()
+            self.tray_icon.deleteLater()
+        
+        # 接受关闭事件
+        event.accept()
+        
+        # 完全退出程序
+        QApplication.quit()
+
+    def force_quit(self):
+        """强制退出程序"""
+        self.close()  # 这会触发 closeEvent 

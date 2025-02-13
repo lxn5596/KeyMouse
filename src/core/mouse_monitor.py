@@ -1,7 +1,9 @@
 from pynput import mouse
 from typing import Set, Dict
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QObject, Signal, QTimer
 from time import time
+from collections import deque
+from threading import Lock
 
 class MouseMonitor(QObject):
     """鼠标监控模块"""
@@ -19,6 +21,14 @@ class MouseMonitor(QObject):
         self._click_times: Dict[str, int] = {}  # 记录连续点击次数
         self._last_click_time: Dict[str, float] = {}  # 记录最后点击时间
         self._double_click_threshold = 0.5  # 双击判定时间（秒）
+        
+        # 滚轮事件控制
+        self._wheel_queue = deque(maxlen=1)  # 只保留最新的一个滚轮事件
+        self._wheel_lock = Lock()
+        self._wheel_timer = QTimer()
+        self._wheel_timer.timeout.connect(self._process_wheel_event)
+        self._wheel_timer.start(200)  # 每200ms处理一次滚轮事件
+        
         self._start_listener()
         
     def _start_listener(self):
@@ -66,14 +76,28 @@ class MouseMonitor(QObject):
     
     def _on_scroll(self, x, y, dx, dy):
         """滚轮回调"""
+        # 确定当前滚动方向
         if dy > 0:
-            self.wheel_moved.emit("滚轮上")
+            direction = "滚轮上"
         elif dy < 0:
-            self.wheel_moved.emit("滚轮下")
+            direction = "滚轮下"
         elif dx > 0:
-            self.wheel_moved.emit("滚轮右")
+            direction = "滚轮右"
         elif dx < 0:
-            self.wheel_moved.emit("滚轮左")
+            direction = "滚轮左"
+        else:
+            return
+        
+        # 将事件添加到队列
+        with self._wheel_lock:
+            self._wheel_queue.append(direction)
+    
+    def _process_wheel_event(self):
+        """处理滚轮事件"""
+        with self._wheel_lock:
+            if self._wheel_queue:
+                direction = self._wheel_queue.pop()
+                self.wheel_moved.emit(direction)
     
     def _on_move(self, x, y):
         """移动回调"""
@@ -85,6 +109,10 @@ class MouseMonitor(QObject):
             return
         
         self.is_running = False
+        
+        # 停止定时器
+        if self._wheel_timer.isActive():
+            self._wheel_timer.stop()
         
         # 停止监听器
         if self.listener:
@@ -99,6 +127,8 @@ class MouseMonitor(QObject):
         # 清理状态
         self._click_times.clear()
         self._last_click_time.clear()
+        with self._wheel_lock:
+            self._wheel_queue.clear()
 
     def __del__(self):
         """析构函数"""
