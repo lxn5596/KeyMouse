@@ -90,10 +90,10 @@ KeyMouse/
 
 🔍 重点检查以下路径：
 
-bash
-
+```bash
 src/assets/
 dist/keymouse/resources/
+```
 八、技术支持
 访问官网获取帮助：https://yuansio.com
 
