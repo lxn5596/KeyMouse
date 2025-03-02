@@ -26,8 +26,9 @@ KeyMouse/
 │   └── main.py
 ├── build.bat                 # 打包脚本
 ├── setup.iss                 # Inno Setup 配置
-├── ChineseSimplified.isl    # 中文语言文件
-└── requirements.txt          # 依赖列表
+├── ChineseSimplified.isl      # 中文语言文件
+├── requirements.txt          # 依赖列表
+└── dist                       # 打包编译后输出目录
 
 ```
 三、打包步骤
