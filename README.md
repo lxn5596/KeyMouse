@@ -8,9 +8,12 @@
   pip install pyinstaller
   pip install pyside6
   pip install pynput
+
+  ```
+  
 二、项目结构
 plaintext
-
+```bash
 KeyMouse/
 ├── src/
 │   ├── assets/
@@ -25,6 +28,8 @@ KeyMouse/
 ├── setup.iss                 # Inno Setup 配置
 ├── ChineseSimplified.isl    # 中文语言文件
 └── requirements.txt          # 依赖列表
+
+```
 三、打包步骤
 确认所有文件位置正确
 
